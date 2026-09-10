@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Calculadora Propinas</string>
+    <string name="hint_horas">Horas</string>
+    <string name="hint_nombre_trabajador">Nombre</string>
+    <string name="desc_eliminar">Eliminar trabajador</string>
+    <string name="hint_nombre_nuevo">Nombre del trabajador</string>
+    <string name="hint_total_propinas">Total de propinas recaudadas</string>
+</resources>

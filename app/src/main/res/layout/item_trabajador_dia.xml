@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:minHeight="48dp">
+
+    <TextView
+        android:id="@+id/tvNombreTrabajador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="@string/hint_nombre_trabajador"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/etHorasTrabajador"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:hint="@string/hint_horas"
+        android:inputType="numberDecimal"
+        android:imeOptions="actionDone"
+        android:maxLength="5"
+        android:minWidth="80dp"
+        android:importantForAutofill="no"
+        android:labelFor="@id/etHorasTrabajador"
+        android:layout_marginEnd="8dp"/>
+
+    <ImageButton
+        android:id="@+id/btnEliminarTrabajador"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_delete"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/desc_eliminar"/>
+
+</LinearLayout>

@@ -1,0 +1,27 @@
+# Android Studio
+*.iml
+.gradle/
+.idea/
+build/
+local.properties
+*.lock
+*.log
+
+# Java
+*.class
+
+# Gradle
+.gradle/
+gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# OneDrive
+*.onecache
+
+# Cache de Android
+.idea/caches/
+.idea/libraries/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/assetWizardSettings.xml
