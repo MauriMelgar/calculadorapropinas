@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnNuevoDia, btnVerRegistros, btnGestionarTrabajadores;
+    private Button btnNuevoDia, btnVerRegistros, btnGestionarTrabajadores, btnResumenSemanal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         btnNuevoDia = findViewById(R.id.btnNuevoDia);
         btnVerRegistros = findViewById(R.id.btnVerRegistros);
         btnGestionarTrabajadores = findViewById(R.id.btnGestionarTrabajadores);
+        btnResumenSemanal = findViewById(R.id.btnResumenSemanal);
 
         btnNuevoDia.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NuevoDiaActivity.class);
@@ -31,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
         btnGestionarTrabajadores.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, GestionarTrabajadoresActivity.class);
+            startActivity(intent);
+        });
+
+        btnResumenSemanal.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ResumenSemanalActivity.class);
             startActivity(intent);
         });
     }

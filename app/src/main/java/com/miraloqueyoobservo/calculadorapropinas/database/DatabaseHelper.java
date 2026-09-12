@@ -226,4 +226,95 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Luego eliminar el día
         db.delete(TABLE_DIAS, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
     }
+
+    // Obtener todos los días con sus trabajadores para calcular semanas
+    public List<DiaPropina> getDiasConTrabajadores() {
+        return getAllDias();
+    }
+
+    // Obtener el total de horas y monto de un trabajador en un rango de fechas
+    public double[] getTotalTrabajadorEnRango(int idTrabajador, long fechaInicio, long fechaFin) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double[] resultado = new double[3]; // [0] = totalHoras, [1] = totalMonto, [2] = diasTrabajados
+
+        String query = "SELECT SUM(td." + COLUMN_HORAS + ") as total_horas, " +
+                "SUM(td." + COLUMN_MONTO + ") as total_monto, " +
+                "COUNT(DISTINCT td." + COLUMN_ID_DIA + ") as dias " +
+                "FROM " + TABLE_TRABAJADORES_DIA + " td " +
+                "JOIN " + TABLE_DIAS + " d ON td." + COLUMN_ID_DIA + " = d." + COLUMN_ID + " " +
+                "WHERE td." + COLUMN_ID_TRABAJADOR + " = ? " +
+                "AND d." + COLUMN_FECHA + " >= ? " +
+                "AND d." + COLUMN_FECHA + " <= ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{
+                String.valueOf(idTrabajador),
+                String.valueOf(fechaInicio),
+                String.valueOf(fechaFin)
+        });
+
+        if (cursor.moveToFirst()) {
+            resultado[0] = cursor.getDouble(cursor.getColumnIndexOrThrow("total_horas"));
+            resultado[1] = cursor.getDouble(cursor.getColumnIndexOrThrow("total_monto"));
+            resultado[2] = cursor.getInt(cursor.getColumnIndexOrThrow("dias"));
+        }
+        cursor.close();
+        return resultado;
+    }
+
+    // Obtener el total de propinas en un rango de fechas
+    public double[] getTotalSemana(long fechaInicio, long fechaFin) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double[] resultado = new double[3]; // [0] = totalPropinas, [1] = totalRepartir, [2] = cantidadDias
+
+        String query = "SELECT SUM(" + COLUMN_TOTAL_PROPINAS + ") as total, " +
+                "SUM(" + COLUMN_TOTAL_REPARTIR + ") as total_rep, " +
+                "COUNT(*) as dias " +
+                "FROM " + TABLE_DIAS + " " +
+                "WHERE " + COLUMN_FECHA + " >= ? " +
+                "AND " + COLUMN_FECHA + " <= ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{
+                String.valueOf(fechaInicio),
+                String.valueOf(fechaFin)
+        });
+
+        if (cursor.moveToFirst()) {
+            resultado[0] = cursor.getDouble(cursor.getColumnIndexOrThrow("total"));
+            resultado[1] = cursor.getDouble(cursor.getColumnIndexOrThrow("total_rep"));
+            resultado[2] = cursor.getInt(cursor.getColumnIndexOrThrow("dias"));
+        }
+        cursor.close();
+        return resultado;
+    }
+
+    // Obtener todos los trabajadores que trabajaron en un rango de fechas
+    public List<Trabajador> getTrabajadoresEnRango(long fechaInicio, long fechaFin) {
+        List<Trabajador> trabajadores = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT DISTINCT t." + COLUMN_ID + ", t." + COLUMN_NOMBRE + " " +
+                "FROM " + TABLE_TRABAJADORES + " t " +
+                "JOIN " + TABLE_TRABAJADORES_DIA + " td ON t." + COLUMN_ID + " = td." + COLUMN_ID_TRABAJADOR + " " +
+                "JOIN " + TABLE_DIAS + " d ON td." + COLUMN_ID_DIA + " = d." + COLUMN_ID + " " +
+                "WHERE d." + COLUMN_FECHA + " >= ? " +
+                "AND d." + COLUMN_FECHA + " <= ? " +
+                "ORDER BY t." + COLUMN_NOMBRE;
+
+        Cursor cursor = db.rawQuery(query, new String[]{
+                String.valueOf(fechaInicio),
+                String.valueOf(fechaFin)
+        });
+
+        if (cursor.moveToFirst()) {
+            do {
+                Trabajador t = new Trabajador();
+                t.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)));
+                t.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)));
+                trabajadores.add(t);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return trabajadores;
+    }
+
 }

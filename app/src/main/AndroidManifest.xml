@@ -28,6 +28,10 @@
             android:name=".GestionarTrabajadoresActivity"
             android:label="Gestionar Trabajadores" />
 
+        <activity
+            android:name=".ResumenSemanalActivity"
+            android:label="Resumen Semanal" />
+
     </application>
 
 </manifest>
